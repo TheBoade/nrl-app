@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabase';
+import HomeScreen from './HomeScreen';
+import { NRL_TEAMS } from './data';
 
 export default function FanApp() {
+  const [selectedGame, setSelectedGame] = useState(null);
   const [events, setEvents] = useState([]);
   const [latest, setLatest] = useState(null);
   const [score, setScore] = useState(null);
   const [animatingId, setAnimatingId] = useState(null);
 
   useEffect(() => {
+    if (!selectedGame) return;
+
     const loadData = async () => {
       const { data: eventData } = await supabase
         .from('events')
@@ -18,7 +23,7 @@ export default function FanApp() {
       const { data: scoreData } = await supabase
         .from('scores')
         .select('*')
-        .eq('game_id', 'game_001')
+        .eq('game_id', selectedGame.id)
         .single();
       if (scoreData) setScore(scoreData);
     };
@@ -55,7 +60,14 @@ export default function FanApp() {
       supabase.removeChannel(eventChannel);
       supabase.removeChannel(scoreChannel);
     };
-  }, []);
+  }, [selectedGame]);
+
+  if (!selectedGame) {
+    return <HomeScreen onSelectGame={setSelectedGame} />;
+  }
+
+  const homeTeam = NRL_TEAMS[selectedGame.home];
+  const awayTeam = NRL_TEAMS[selectedGame.away];
 
   const getEventColor = (label) => {
     const colors = {
@@ -86,11 +98,6 @@ export default function FanApp() {
           from { opacity: 0; transform: translateY(-20px) scale(0.95); }
           to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        @keyndef pulseIn {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.02); }
-          100% { transform: scale(1); }
-        }
         @keyframes newEvent {
           0% { opacity: 0; transform: translateY(-12px); }
           100% { opacity: 1; transform: translateY(0); }
@@ -98,7 +105,7 @@ export default function FanApp() {
         .event-new { animation: newEvent 0.4s ease forwards; }
       `}</style>
 
-      {/* Live Banner Alert */}
+      {/* Live alert */}
       {latest && (
         <div style={{
           position: "fixed",
@@ -115,10 +122,10 @@ export default function FanApp() {
           }}>
             <div style={{ fontSize: 40 }}>{latest.icon}</div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: 3, opacity: 0.8, textTransform: "uppercase", color: "rgba(0,0,0,0.7)", marginBottom: 2 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: 3, color: "rgba(0,0,0,0.7)", marginBottom: 2, textTransform: "uppercase" }}>
                 {latest.team}
               </div>
-              <div style={{ fontSize: 22, fontWeight: 900, color: "black", letterSpacing: -0.5 }}>
+              <div style={{ fontSize: 22, fontWeight: 900, color: "black" }}>
                 {latest.label}
               </div>
               {latest.player && (
@@ -130,8 +137,7 @@ export default function FanApp() {
             {latest.points > 0 && (
               <div style={{
                 background: "rgba(0,0,0,0.2)",
-                borderRadius: 12, padding: "8px 14px",
-                textAlign: "center",
+                borderRadius: 12, padding: "8px 14px", textAlign: "center",
               }}>
                 <div style={{ fontSize: 22, fontWeight: 900, color: "black" }}>+{latest.points}</div>
                 <div style={{ fontSize: 9, color: "rgba(0,0,0,0.6)", letterSpacing: 2 }}>PTS</div>
@@ -143,76 +149,75 @@ export default function FanApp() {
 
       {/* Header */}
       <div style={{
-        padding: "16px 20px",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        borderBottom: "1px solid #111",
+        padding: "52px 20px 0",
+        position: "sticky", top: 0,
+        background: "#080810", zIndex: 100,
       }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{
-            width: 7, height: 7, borderRadius: "50%",
-            background: "#22c55e",
-            boxShadow: "0 0 10px #22c55e",
-          }} />
-          <span style={{ fontSize: 11, letterSpacing: 4, color: "#444", textTransform: "uppercase" }}>Live</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+          <button
+            onClick={() => setSelectedGame(null)}
+            style={{
+              background: "none", border: "none",
+              color: "#666", fontSize: 24,
+              cursor: "pointer", padding: 0, lineHeight: 1,
+            }}
+          >‹</button>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ width: 7, height: 7, borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 10px #22c55e" }} />
+            <span style={{ fontSize: 11, letterSpacing: 4, color: "#444" }}>LIVE</span>
+          </div>
         </div>
-        <div style={{ fontSize: 11, letterSpacing: 3, color: "#333", textTransform: "uppercase" }}>NRL 2026</div>
-      </div>
 
-      {/* Scoreboard */}
-      {score ? (
+        {/* Scoreboard */}
         <div style={{
-          padding: "28px 24px",
-          background: "linear-gradient(180deg, #0f0f1a 0%, #080810 100%)",
+          padding: "20px 0 20px",
           borderBottom: "1px solid #111",
         }}>
+          {/* Team colour strips */}
+          <div style={{ display: "flex", height: 3, borderRadius: 2, overflow: "hidden", marginBottom: 20 }}>
+            <div style={{ flex: 1, background: homeTeam?.color || "#333" }} />
+            <div style={{ flex: 1, background: awayTeam?.color || "#333" }} />
+          </div>
+
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
             <div style={{ flex: 1, textAlign: "center" }}>
               <div style={{ fontSize: 11, color: "#555", letterSpacing: 3, marginBottom: 8, textTransform: "uppercase" }}>
-                {score.home_team}
+                {selectedGame.home}
               </div>
-              <div style={{ fontSize: 64, fontWeight: 900, lineHeight: 1, letterSpacing: -2 }}>
-                {score.home_score}
+              <div style={{ fontSize: 56, fontWeight: 900, lineHeight: 1, letterSpacing: -2 }}>
+                {score ? score.home_score : selectedGame.home_score ?? 0}
               </div>
             </div>
-            <div style={{ padding: "0 20px", textAlign: "center" }}>
-              <div style={{
-                fontSize: 10, letterSpacing: 3, color: "#333",
-                textTransform: "uppercase", marginBottom: 6,
-              }}>
-                Half {score.half}
+            <div style={{ padding: "0 16px", textAlign: "center" }}>
+              <div style={{ fontSize: 10, letterSpacing: 3, color: "#333", marginBottom: 4 }}>
+                {score ? `H${score.half}` : ""}
               </div>
-              <div style={{ fontSize: 20, color: "#222", fontWeight: 300 }}>—</div>
-              <div style={{ fontSize: 13, color: "#444", marginTop: 6, fontWeight: 700 }}>
-                {score.minute}'
+              <div style={{ fontSize: 18, color: "#222" }}>—</div>
+              <div style={{ fontSize: 12, color: "#444", marginTop: 4, fontWeight: 700 }}>
+                {score ? `${score.minute}'` : selectedGame.time}
               </div>
             </div>
             <div style={{ flex: 1, textAlign: "center" }}>
               <div style={{ fontSize: 11, color: "#555", letterSpacing: 3, marginBottom: 8, textTransform: "uppercase" }}>
-                {score.away_team}
+                {selectedGame.away}
               </div>
-              <div style={{ fontSize: 64, fontWeight: 900, lineHeight: 1, letterSpacing: -2 }}>
-                {score.away_score}
+              <div style={{ fontSize: 56, fontWeight: 900, lineHeight: 1, letterSpacing: -2 }}>
+                {score ? score.away_score : selectedGame.away_score ?? 0}
               </div>
             </div>
           </div>
         </div>
-      ) : (
-        <div style={{ padding: "40px 24px", textAlign: "center", color: "#222", fontSize: 11, letterSpacing: 4 }}>
-          WAITING FOR KICKOFF
-        </div>
-      )}
+      </div>
 
-      {/* Event Feed */}
-      <div style={{ padding: "20px 16px" }}>
-        <div style={{ fontSize: 10, letterSpacing: 4, color: "#2a2a2a", marginBottom: 16, textTransform: "uppercase" }}>
-          Match Events
-        </div>
+      {/* Event feed */}
+      <div style={{ padding: "20px 16px 100px" }}>
+        <div style={{ fontSize: 10, letterSpacing: 4, color: "#2a2a2a", marginBottom: 16 }}>MATCH EVENTS</div>
         {events.length === 0 ? (
           <div style={{ textAlign: "center", color: "#1a1a1a", fontSize: 11, letterSpacing: 3, marginTop: 60 }}>
             NO EVENTS YET
           </div>
         ) : (
-          events.map((ev, i) => {
+          events.map(ev => {
             const color = getEventColor(ev.label);
             const isNew = ev.id === animatingId;
             return (
@@ -229,19 +234,14 @@ export default function FanApp() {
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", padding: "14px 16px", gap: 14 }}>
-                  {/* Colored left strip */}
-                  <div style={{
-                    width: 3, height: 44, borderRadius: 2,
-                    background: color, flexShrink: 0,
-                  }} />
-
-                  {/* Icon */}
+                  <div style={{ width: 3, height: 44, borderRadius: 2, background: color, flexShrink: 0 }} />
                   <div style={{ fontSize: 28, flexShrink: 0 }}>{ev.icon}</div>
-
-                  {/* Content */}
                   <div style={{ flex: 1 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
-                      <span style={{ fontSize: 15, fontWeight: 800, letterSpacing: -0.3 }}>{ev.label}</span>
+                      <span style={{
+                        fontSize: 15, fontWeight: 800,
+                        color: ev.label === 'Try' ? '#22c55e' : 'white',
+                      }}>{ev.label}</span>
                       {ev.points > 0 && (
                         <span style={{
                           fontSize: 10, fontWeight: 700, color: color,
@@ -257,8 +257,6 @@ export default function FanApp() {
                       {ev.team}
                     </div>
                   </div>
-
-                  {/* Minute */}
                   <div style={{ textAlign: "right", flexShrink: 0 }}>
                     <div style={{ fontSize: 16, fontWeight: 900, color: "#333" }}>{ev.minute}'</div>
                     <div style={{ fontSize: 9, color: "#222", letterSpacing: 1, marginTop: 2 }}>H{ev.half}</div>
@@ -268,6 +266,36 @@ export default function FanApp() {
             );
           })
         )}
+      </div>
+
+      {/* Bottom nav */}
+      <div style={{
+        position: "fixed", bottom: 0, left: "50%",
+        transform: "translateX(-50%)",
+        width: "100%", maxWidth: 430,
+        background: "#080810",
+        borderTop: "1px solid #111",
+        padding: "12px 0 28px",
+        display: "flex", justifyContent: "space-around",
+      }}>
+        {[
+          { icon: "🏉", label: "Games" },
+          { icon: "📊", label: "Stats" },
+          { icon: "🃏", label: "Cards" },
+        ].map((tab, i) => (
+          <button
+            key={tab.label}
+            style={{
+              background: "none", border: "none",
+              color: i === 0 ? "white" : "#333",
+              cursor: "pointer", textAlign: "center",
+              fontFamily: "inherit",
+            }}
+          >
+            <div style={{ fontSize: 22 }}>{tab.icon}</div>
+            <div style={{ fontSize: 10, letterSpacing: 2, marginTop: 4 }}>{tab.label}</div>
+          </button>
+        ))}
       </div>
     </div>
   );

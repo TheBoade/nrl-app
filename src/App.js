@@ -1,25 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+import AdminDashboard from './AdminDashboard';
+import FanApp from './FanApp';
+import GameSetup from './GameSetup';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const isFan = window.location.search.includes('fan');
+  const [game, setGame] = useState(null);
+
+  if (isFan) return <FanApp />;
+  if (!game) return <GameSetup onStart={setGame} />;
+  return <AdminDashboard game={game} />;
 }
 
 export default App;

@@ -84,7 +84,6 @@ function Countdown({ game, session, onAuthRequest }) {
 
   return (
     <div style={{ padding: "24px 20px 120px" }}>
-      {/* Countdown timer */}
       <div style={{
         background: "#0f0f18", borderRadius: 16,
         padding: "28px 20px", textAlign: "center",
@@ -111,7 +110,6 @@ function Countdown({ game, session, onAuthRequest }) {
         <div style={{ fontSize: 11, color: "#444", letterSpacing: 2 }}>{game.venue}</div>
       </div>
 
-      {/* Chat */}
       <div style={{ background: "#0f0f18", borderRadius: 16, border: "1px solid #111", overflow: "hidden" }}>
         <div style={{ padding: "14px 16px", borderBottom: "1px solid #111", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ fontSize: 13, fontWeight: 800 }}>Match Chat</div>
@@ -127,8 +125,6 @@ function Countdown({ game, session, onAuthRequest }) {
             ))}
           </div>
         </div>
-
-        {/* Messages — no fixed height, just natural scroll with page */}
         <div style={{ padding: "12px 16px" }}>
           {sortedMessages.map(msg => {
             const t = NRL_TEAMS[msg.team];
@@ -159,8 +155,6 @@ function Countdown({ game, session, onAuthRequest }) {
             );
           })}
         </div>
-
-        {/* Input */}
         <div style={{ padding: "12px 16px", borderTop: "1px solid #111", display: "flex", gap: 10, alignItems: "center" }}>
           <div
             onClick={() => !session && onAuthRequest()}
@@ -274,41 +268,56 @@ function Matchup({ game }) {
   );
 }
 
-function Players({ game }) {
-  const homePlayers = [
-    { number: 1, name: "Reece Walsh", position: "FB", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 2, name: "Selwyn Cobbo", position: "W", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 3, name: "Kotoni Staggs", position: "C", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 4, name: "Herbie Farnworth", position: "C", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 5, name: "Ezra Mam", position: "W", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 6, name: "Jock Madden", position: "5/8", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 7, name: "Adam Reynolds", position: "HB", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 8, name: "Payne Haas", position: "P", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 9, name: "Billy Walters", position: "HK", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 10, name: "Pat Carrigan", position: "P", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 11, name: "Jordan Riki", position: "2RF", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 12, name: "Kurt Capewell", position: "2RF", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 13, name: "Tevita Pangai Jr", position: "L", tries: 0, runMetres: 0, tackles: 0 },
-  ];
+function Players({ game, events }) {
+  const rosters = {
+    home: [
+      { number: 1, name: "Reece Walsh", position: "FB" },
+      { number: 2, name: "Selwyn Cobbo", position: "W" },
+      { number: 3, name: "Kotoni Staggs", position: "C" },
+      { number: 4, name: "Herbie Farnworth", position: "C" },
+      { number: 5, name: "Ezra Mam", position: "W" },
+      { number: 6, name: "Jock Madden", position: "5/8" },
+      { number: 7, name: "Adam Reynolds", position: "HB" },
+      { number: 8, name: "Payne Haas", position: "P" },
+      { number: 9, name: "Billy Walters", position: "HK" },
+      { number: 10, name: "Pat Carrigan", position: "P" },
+      { number: 11, name: "Jordan Riki", position: "2RF" },
+      { number: 12, name: "Kurt Capewell", position: "2RF" },
+      { number: 13, name: "Tevita Pangai Jr", position: "L" },
+    ],
+    away: [
+      { number: 1, name: "Ryan Papenhuyzen", position: "FB" },
+      { number: 2, name: "Xavier Coates", position: "W" },
+      { number: 3, name: "Reimis Smith", position: "C" },
+      { number: 4, name: "Tyran Wishart", position: "C" },
+      { number: 5, name: "Nick Meaney", position: "W" },
+      { number: 6, name: "Cam Munster", position: "5/8" },
+      { number: 7, name: "Jahrome Hughes", position: "HB" },
+      { number: 8, name: "Christian Welch", position: "P" },
+      { number: 9, name: "Harry Grant", position: "HK" },
+      { number: 10, name: "Nelson Asofa-Solomona", position: "P" },
+      { number: 11, name: "Eli Katoa", position: "2RF" },
+      { number: 12, name: "Shawn Blore", position: "2RF" },
+      { number: 13, name: "Trent Loiero", position: "L" },
+    ],
+  };
 
-  const awayPlayers = [
-    { number: 1, name: "Ryan Papenhuyzen", position: "FB", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 2, name: "Xavier Coates", position: "W", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 3, name: "Reimis Smith", position: "C", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 4, name: "Tyran Wishart", position: "C", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 5, name: "Nick Meaney", position: "W", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 6, name: "Cam Munster", position: "5/8", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 7, name: "Jahrome Hughes", position: "HB", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 8, name: "Christian Welch", position: "P", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 9, name: "Harry Grant", position: "HK", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 10, name: "Nelson Asofa-Solomona", position: "P", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 11, name: "Eli Katoa", position: "2RF", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 12, name: "Shawn Blore", position: "2RF", tries: 0, runMetres: 0, tackles: 0 },
-    { number: 13, name: "Trent Loiero", position: "L", tries: 0, runMetres: 0, tackles: 0 },
-  ];
+  // Build player stats from events
+  const playerStats = {};
+  events.forEach(ev => {
+    if (!ev.player) return;
+    if (!playerStats[ev.player]) {
+      playerStats[ev.player] = { tries: 0, goals: 0, points: 0, lineBreaks: 0, sinBins: 0 };
+    }
+    if (ev.label === 'Try') playerStats[ev.player].tries += 1;
+    if (ev.label === 'Conversion' || ev.label === 'Penalty Goal' || ev.label === 'Drop Goal') playerStats[ev.player].goals += 1;
+    if (ev.label === 'Line Break') playerStats[ev.player].lineBreaks += 1;
+    if (ev.label === 'Sin Bin') playerStats[ev.player].sinBins += 1;
+    if (ev.points) playerStats[ev.player].points += Number(ev.points);
+  });
 
   const [activeTeam, setActiveTeam] = useState('home');
-  const players = activeTeam === 'home' ? homePlayers : awayPlayers;
+  const players = rosters[activeTeam];
   const team = activeTeam === 'home' ? game.home : game.away;
 
   return (
@@ -336,33 +345,54 @@ function Players({ game }) {
       </div>
 
       <div style={{ background: "#0f0f18", borderRadius: 16, border: "1px solid #111", overflow: "hidden" }}>
+        {/* Header */}
         <div style={{
-          display: "grid", gridTemplateColumns: "40px 1fr 40px 60px 60px",
+          display: "grid", gridTemplateColumns: "40px 1fr 36px 36px 36px 44px",
           padding: "10px 16px", borderBottom: "1px solid #111",
           fontSize: 9, color: "#444", letterSpacing: 2,
         }}>
-          <div>#</div><div>PLAYER</div>
+          <div>#</div>
+          <div>PLAYER</div>
           <div style={{ textAlign: "center" }}>T</div>
-          <div style={{ textAlign: "center" }}>METRES</div>
-          <div style={{ textAlign: "center" }}>TACKLES</div>
+          <div style={{ textAlign: "center" }}>G</div>
+          <div style={{ textAlign: "center" }}>LB</div>
+          <div style={{ textAlign: "center" }}>PTS</div>
         </div>
-        {players.map((player, i) => (
-          <div key={player.number} style={{
-            display: "grid", gridTemplateColumns: "40px 1fr 40px 60px 60px",
-            padding: "12px 16px",
-            borderBottom: i < players.length - 1 ? "1px solid #0a0a12" : "none",
-            alignItems: "center",
-          }}>
-            <div><TeamAvatar team={team} number={player.number} name={player.name} size={32} /></div>
-            <div style={{ paddingLeft: 8 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: "white" }}>{player.name}</div>
-              <div style={{ fontSize: 10, color: "#444", marginTop: 2, letterSpacing: 1 }}>{player.position}</div>
+
+        {players.map((player, i) => {
+          const stats = playerStats[player.name] || { tries: 0, goals: 0, points: 0, lineBreaks: 0, sinBins: 0 };
+          const hasStats = stats.tries > 0 || stats.goals > 0 || stats.lineBreaks > 0;
+          return (
+            <div key={player.number} style={{
+              display: "grid", gridTemplateColumns: "40px 1fr 36px 36px 36px 44px",
+              padding: "12px 16px",
+              borderBottom: i < players.length - 1 ? "1px solid #0a0a12" : "none",
+              alignItems: "center",
+              background: stats.sinBins > 0 ? "#1a1400" : "transparent",
+            }}>
+              <div><TeamAvatar team={team} number={player.number} name={player.name} size={32} /></div>
+              <div style={{ paddingLeft: 8 }}>
+                <div style={{ fontSize: 12, fontWeight: hasStats ? 900 : 700, color: stats.sinBins > 0 ? "#eab308" : "white" }}>
+                  {player.name}
+                  {stats.sinBins > 0 && <span style={{ fontSize: 9, marginLeft: 6, color: "#eab308", letterSpacing: 1 }}>SIN BIN</span>}
+                </div>
+                <div style={{ fontSize: 10, color: "#444", marginTop: 2, letterSpacing: 1 }}>{player.position}</div>
+              </div>
+              <div style={{ textAlign: "center", fontSize: 13, fontWeight: stats.tries > 0 ? 900 : 400, color: stats.tries > 0 ? "#22c55e" : "#333" }}>
+                {stats.tries || '—'}
+              </div>
+              <div style={{ textAlign: "center", fontSize: 13, fontWeight: stats.goals > 0 ? 900 : 400, color: stats.goals > 0 ? "white" : "#333" }}>
+                {stats.goals || '—'}
+              </div>
+              <div style={{ textAlign: "center", fontSize: 13, fontWeight: stats.lineBreaks > 0 ? 900 : 400, color: stats.lineBreaks > 0 ? "#a855f7" : "#333" }}>
+                {stats.lineBreaks || '—'}
+              </div>
+              <div style={{ textAlign: "center", fontSize: 13, fontWeight: stats.points > 0 ? 900 : 400, color: stats.points > 0 ? "#22c55e" : "#333" }}>
+                {stats.points || '—'}
+              </div>
             </div>
-            <div style={{ textAlign: "center", fontSize: 13, fontWeight: player.tries > 0 ? 900 : 400, color: player.tries > 0 ? "#22c55e" : "#333" }}>{player.tries}</div>
-            <div style={{ textAlign: "center", fontSize: 13, color: player.runMetres > 0 ? "white" : "#333" }}>{player.runMetres}</div>
-            <div style={{ textAlign: "center", fontSize: 13, color: player.tackles > 0 ? "white" : "#333" }}>{player.tackles}</div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -565,7 +595,7 @@ export default function GameScreen({ game, onBack, session }) {
           )
       )}
       {activeTab === 'matchup' && <Matchup game={game} />}
-      {activeTab === 'players' && <Players game={game} />}
+      {activeTab === 'players' && <Players game={game} events={events} />}
 
       <div style={{
         position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)",

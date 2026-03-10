@@ -146,8 +146,6 @@ function Profile({ session, onClose, onSignOut }) {
           }
         `}</style>
         <div style={{ width: 40, height: 4, background: "#2a2a3a", borderRadius: 2, margin: "0 auto 28px" }} />
-
-        {/* Avatar placeholder */}
         <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 28 }}>
           <div style={{
             width: 64, height: 64, borderRadius: "50%",
@@ -156,41 +154,28 @@ function Profile({ session, onClose, onSignOut }) {
             fontSize: 28,
           }}>👤</div>
           <div>
-            <div style={{ fontSize: 18, fontWeight: 900, marginBottom: 4 }}>
-              {session.user.email.split('@')[0]}
-            </div>
+            <div style={{ fontSize: 18, fontWeight: 900, marginBottom: 4 }}>{session.user.email.split('@')[0]}</div>
             <div style={{ fontSize: 12, color: "#444" }}>{session.user.email}</div>
           </div>
         </div>
-
-        {/* Upload profile pic placeholder */}
         <button style={{
           width: "100%", padding: "14px", borderRadius: 12,
           background: "#080810", border: "1px solid #2a2a3a",
           color: "#666", fontSize: 13, fontWeight: 700,
           cursor: "pointer", fontFamily: "inherit", marginBottom: 12,
-        }}>
-          📷 Upload Profile Picture
-        </button>
-
-        {/* Sign out */}
-        <button
-          onClick={onSignOut}
-          style={{
-            width: "100%", padding: "14px", borderRadius: 12,
-            background: "#ef444422", border: "1px solid #ef444444",
-            color: "#ef4444", fontSize: 13, fontWeight: 700,
-            cursor: "pointer", fontFamily: "inherit",
-          }}
-        >
-          Sign Out
-        </button>
+        }}>📷 Upload Profile Picture</button>
+        <button onClick={onSignOut} style={{
+          width: "100%", padding: "14px", borderRadius: 12,
+          background: "#ef444422", border: "1px solid #ef444444",
+          color: "#ef4444", fontSize: 13, fontWeight: 700,
+          cursor: "pointer", fontFamily: "inherit",
+        }}>Sign Out</button>
       </div>
     </>
   );
 }
 
-export default function HomeScreen({ onSelectGame, session }) {
+export default function HomeScreen({ onSelectGame, session, onShowStandings }) {
   const [currentRound, setCurrentRound] = useState(0);
   const [showAuth, setShowAuth] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
@@ -274,7 +259,7 @@ export default function HomeScreen({ onSelectGame, session }) {
 
       {/* Standings button */}
       <div style={{ padding: "12px 20px 0" }}>
-        <button style={{
+        <button onClick={onShowStandings} style={{
           background: "transparent", border: "1px solid #2a2a3a",
           borderRadius: 8, padding: "8px 16px",
           color: "white", fontSize: 11, letterSpacing: 3,
@@ -339,7 +324,11 @@ export default function HomeScreen({ onSelectGame, session }) {
         borderTop: "1px solid #111", padding: "12px 0 28px",
         display: "flex", justifyContent: "space-around",
       }}>
-        {[{ icon: "🏉", label: "Games" }, { icon: "📊", label: "Stats" }, { icon: "🃏", label: "Cards" }].map((tab, i) => (
+        {[
+          { icon: "🏉", label: "Games" },
+          { icon: "📊", label: "Stats" },
+          { icon: "🃏", label: "Cards" },
+        ].map((tab, i) => (
           <button key={tab.label} style={{
             background: "none", border: "none",
             color: i === 0 ? "white" : "#333",

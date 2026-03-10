@@ -22,28 +22,36 @@ export const ROUNDS = [
   {
     round: 1,
     games: [
-      { id: "game_001", home: "Broncos", away: "Panthers", time: "Fri 8:00pm", venue: "Suncorp Stadium", status: "full_time", home_score: 18, away_score: 12 },
-      { id: "game_002", home: "Warriors", away: "Roosters", time: "Fri 6:00pm", venue: "Go Media Stadium", status: "full_time", home_score: 6, away_score: 24 },
-      { id: "game_003", home: "Dolphins", away: "Rabbitohs", time: "Sat 5:30pm", venue: "Kayo Stadium", status: "full_time", home_score: 20, away_score: 16 },
-      { id: "game_004", home: "Sharks", away: "Titans", time: "Sat 7:35pm", venue: "Ocean Protect Stadium", status: "full_time", home_score: 28, away_score: 10 },
-      { id: "game_005", home: "Sea Eagles", away: "Storm", time: "Sun 4:05pm", venue: "4 Pines Park", status: "full_time", home_score: 14, away_score: 22 },
-      { id: "game_006", home: "Eels", away: "Raiders", time: "Sun 6:30pm", venue: "CommBank Stadium", status: "full_time", home_score: 18, away_score: 18 },
-      { id: "game_007", home: "Knights", away: "Cowboys", time: "Sun 1:15pm", venue: "McDonald Jones Stadium", status: "full_time", home_score: 30, away_score: 12 },
-      { id: "game_008", home: "Bulldogs", away: "Dragons", time: "Sun 3:30pm", venue: "Accor Stadium", status: "full_time", home_score: 16, away_score: 14 },
-      { id: "game_009", home: "Tigers", away: "Knights", time: "Mon 6:00pm", venue: "Leichhardt Oval", status: "upcoming" },
-    ]
+      // Sun 1 Mar — Las Vegas (AEDT) — Tigers had the bye
+      { id: "r1_g1", home: "Knights",    away: "Cowboys",   status: "full_time", home_score: 28, away_score: 18, time: "Sun 1 Mar",  venue: "Allegiant Stadium, Las Vegas" },
+      { id: "r1_g2", home: "Bulldogs",   away: "Dragons",   status: "full_time", home_score: 15, away_score: 14, time: "Sun 1 Mar",  venue: "Allegiant Stadium, Las Vegas" },
+      // Thu 5 Mar
+      { id: "r1_g3", home: "Storm",      away: "Eels",      status: "full_time", home_score: 52, away_score: 4,  time: "Thu 5 Mar",  venue: "AAMI Park, Melbourne" },
+      // Fri 6 Mar
+      { id: "r1_g4", home: "Warriors",   away: "Roosters",  status: "full_time", home_score: 42, away_score: 18, time: "Fri 6 Mar",  venue: "Go Media Stadium, Auckland" },
+      { id: "r1_g5", home: "Broncos",    away: "Panthers",  status: "full_time", home_score: 0,  away_score: 26, time: "Fri 6 Mar",  venue: "Suncorp Stadium, Brisbane" },
+      // Sat 7 Mar
+      { id: "r1_g6", home: "Sharks",     away: "Titans",    status: "full_time", home_score: 50, away_score: 10, time: "Sat 7 Mar",  venue: "Ocean Protect Stadium, Sydney" },
+      { id: "r1_g7", home: "Sea Eagles", away: "Raiders",   status: "full_time", home_score: 28, away_score: 29, time: "Sat 7 Mar",  venue: "4 Pines Park, Sydney" },
+      // Sun 8 Mar
+      { id: "r1_g8", home: "Dolphins",   away: "Rabbitohs", status: "full_time", home_score: 30, away_score: 40, time: "Sun 8 Mar",  venue: "Suncorp Stadium, Brisbane" },
+    ],
   },
   {
     round: 2,
     games: [
-      { id: "game_010", home: "Storm", away: "Broncos", time: "Thu 7:50pm", venue: "AAMI Park", status: "upcoming" },
-      { id: "game_011", home: "Panthers", away: "Rabbitohs", time: "Fri 7:55pm", venue: "BlueBet Stadium", status: "upcoming" },
-      { id: "game_012", home: "Roosters", away: "Sharks", time: "Sat 3:00pm", venue: "Allianz Stadium", status: "upcoming" },
-      { id: "game_013", home: "Raiders", away: "Sea Eagles", time: "Sat 5:30pm", venue: "GIO Stadium", status: "upcoming" },
-      { id: "game_014", home: "Cowboys", away: "Eels", time: "Sat 7:35pm", venue: "Qld Country Bank Stadium", status: "upcoming" },
-      { id: "game_015", home: "Titans", away: "Warriors", time: "Sun 2:00pm", venue: "Cbus Super Stadium", status: "upcoming" },
-      { id: "game_016", home: "Bulldogs", away: "Tigers", time: "Sun 4:05pm", venue: "Accor Stadium", status: "upcoming" },
-      { id: "game_017", home: "Dragons", away: "Dolphins", time: "Sun 6:30pm", venue: "WIN Stadium", status: "upcoming" },
-    ]
+      // Thu 12 Mar — Bulldogs have the bye
+      { id: "r2_g1", home: "Broncos",    away: "Eels",      status: "upcoming", time: "Thu 8:00pm", venue: "Suncorp Stadium, Brisbane" },
+      // Fri 13 Mar
+      { id: "r2_g2", home: "Warriors",   away: "Raiders",   status: "upcoming", time: "Fri 6:00pm", venue: "Go Media Stadium, Auckland" },
+      { id: "r2_g3", home: "Roosters",   away: "Rabbitohs", status: "upcoming", time: "Fri 8:00pm", venue: "Allianz Stadium, Sydney" },
+      // Sat 14 Mar
+      { id: "r2_g4", home: "Tigers",     away: "Cowboys",   status: "upcoming", time: "Sat 3:00pm", venue: "Leichhardt Oval, Sydney" },
+      { id: "r2_g5", home: "Dragons",    away: "Storm",     status: "upcoming", time: "Sat 5:30pm", venue: "WIN Stadium, Wollongong" },
+      { id: "r2_g6", home: "Panthers",   away: "Sharks",    status: "upcoming", time: "Sat 7:30pm", venue: "Carrington Park, Bathurst" },
+      // Sun 15 Mar
+      { id: "r2_g7", home: "Sea Eagles", away: "Knights",   status: "upcoming", time: "Sun 4:05pm", venue: "4 Pines Park, Sydney" },
+      { id: "r2_g8", home: "Dolphins",   away: "Titans",    status: "upcoming", time: "Sun 6:15pm", venue: "Suncorp Stadium, Brisbane" },
+    ],
   },
 ];

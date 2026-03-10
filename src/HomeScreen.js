@@ -175,7 +175,7 @@ function Profile({ session, onClose, onSignOut }) {
   );
 }
 
-export default function HomeScreen({ onSelectGame, session, onShowStandings }) {
+export default function HomeScreen({ onSelectGame, session, onShowStandings, onShowStats }) {
   const [currentRound, setCurrentRound] = useState(0);
   const [showAuth, setShowAuth] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
@@ -324,20 +324,18 @@ export default function HomeScreen({ onSelectGame, session, onShowStandings }) {
         borderTop: "1px solid #111", padding: "12px 0 28px",
         display: "flex", justifyContent: "space-around",
       }}>
-        {[
-          { icon: "🏉", label: "Games" },
-          { icon: "📊", label: "Stats" },
-          { icon: "🃏", label: "Cards" },
-        ].map((tab, i) => (
-          <button key={tab.label} style={{
-            background: "none", border: "none",
-            color: i === 0 ? "white" : "#333",
-            cursor: "pointer", textAlign: "center", fontFamily: "inherit",
-          }}>
-            <div style={{ fontSize: 22 }}>{tab.icon}</div>
-            <div style={{ fontSize: 10, letterSpacing: 2, marginTop: 4 }}>{tab.label}</div>
-          </button>
-        ))}
+        <button style={{ background: "none", border: "none", color: "white", cursor: "pointer", textAlign: "center", fontFamily: "inherit" }}>
+          <div style={{ fontSize: 22 }}>🏉</div>
+          <div style={{ fontSize: 10, letterSpacing: 2, marginTop: 4 }}>Games</div>
+        </button>
+        <button onClick={onShowStats} style={{ background: "none", border: "none", color: "#333", cursor: "pointer", textAlign: "center", fontFamily: "inherit" }}>
+          <div style={{ fontSize: 22 }}>📊</div>
+          <div style={{ fontSize: 10, letterSpacing: 2, marginTop: 4 }}>Stats</div>
+        </button>
+        <button style={{ background: "none", border: "none", color: "#333", cursor: "pointer", textAlign: "center", fontFamily: "inherit" }}>
+          <div style={{ fontSize: 22 }}>🃏</div>
+          <div style={{ fontSize: 10, letterSpacing: 2, marginTop: 4 }}>Cards</div>
+        </button>
       </div>
 
       {showAuth && <Auth onClose={() => setShowAuth(false)} onSuccess={() => setShowAuth(false)} />}

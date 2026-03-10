@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ROUNDS, NRL_TEAMS } from './data';
+import Auth from './Auth';
 
 function TeamAvatar({ team, number, name }) {
   const t = NRL_TEAMS[team];
@@ -26,7 +27,7 @@ function TeamAvatar({ team, number, name }) {
           <div style={{ fontSize: 13, color: "white", fontWeight: 900, lineHeight: 1, letterSpacing: -0.5 }}>{initials}</div>
         </div>
       </div>
-      <div style={{ fontSize: 9, color: "#444", textAlign: "center", maxWidth: 52, lineHeight: 1.3 }}>
+      <div style={{ fontSize: 9, color: "white", fontWeight: 700, textAlign: "center", maxWidth: 52, lineHeight: 1.3 }}>
         {name?.split(' ').pop()}
       </div>
     </div>
@@ -42,16 +43,10 @@ function GameCard({ game, onClick }) {
   const awayWon = isFullTime && game.away_score > game.home_score;
 
   return (
-    <div
-      onClick={onClick}
-      style={{
-        background: "#0f0f18",
-        borderRadius: 14,
-        overflow: "hidden",
-        border: `1px solid ${isLive ? "#22c55e44" : "#111"}`,
-        cursor: "pointer",
-      }}
-    >
+    <div onClick={onClick} style={{
+      background: "#0f0f18", borderRadius: 14, overflow: "hidden",
+      border: `1px solid ${isLive ? "#22c55e44" : "#111"}`, cursor: "pointer",
+    }}>
       <div style={{ display: "flex", height: 5 }}>
         <div style={{ flex: 1, display: "flex", flexDirection: "column", opacity: awayWon ? 0.4 : 1 }}>
           {[ht?.c1, ht?.c2, ht?.c3].map((c, i) => <div key={i} style={{ flex: 1, background: c || "#333" }} />)}
@@ -60,19 +55,12 @@ function GameCard({ game, onClick }) {
           {[at?.c1, at?.c2, at?.c3].map((c, i) => <div key={i} style={{ flex: 1, background: c || "#333" }} />)}
         </div>
       </div>
-
       <div style={{ padding: "10px 12px 12px" }}>
         <div style={{ marginBottom: 8, display: "flex", alignItems: "center", gap: 5 }}>
-          {isLive && (
-            <>
-              <div style={{ width: 5, height: 5, borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 6px #22c55e" }} />
-              <span style={{ fontSize: 9, color: "#22c55e", letterSpacing: 2, fontWeight: 700 }}>LIVE</span>
-            </>
-          )}
+          {isLive && (<><div style={{ width: 5, height: 5, borderRadius: "50%", background: "#22c55e", boxShadow: "0 0 6px #22c55e" }} /><span style={{ fontSize: 9, color: "#22c55e", letterSpacing: 2, fontWeight: 700 }}>LIVE</span></>)}
           {isFullTime && <span style={{ fontSize: 9, color: "#444", letterSpacing: 2 }}>FT</span>}
           {!isLive && !isFullTime && <span style={{ fontSize: 9, color: "#444", letterSpacing: 1 }}>{game.time}</span>}
         </div>
-
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8, opacity: awayWon ? 0.4 : 1 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
             <div style={{ width: 22, height: 14, borderRadius: 3, overflow: "hidden", display: "flex", flexDirection: "column", flexShrink: 0 }}>
@@ -80,11 +68,8 @@ function GameCard({ game, onClick }) {
             </div>
             <span style={{ fontSize: 11, fontWeight: homeWon ? 900 : 600, color: homeWon ? "white" : "#aaa" }}>{game.home}</span>
           </div>
-          {(isLive || isFullTime) && (
-            <span style={{ fontSize: 17, fontWeight: homeWon ? 900 : 600, color: homeWon ? "white" : "#666" }}>{game.home_score}</span>
-          )}
+          {(isLive || isFullTime) && <span style={{ fontSize: 17, fontWeight: homeWon ? 900 : 600, color: homeWon ? "white" : "#666" }}>{game.home_score}</span>}
         </div>
-
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", opacity: homeWon ? 0.4 : 1 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
             <div style={{ width: 22, height: 14, borderRadius: 3, overflow: "hidden", display: "flex", flexDirection: "column", flexShrink: 0 }}>
@@ -92,14 +77,9 @@ function GameCard({ game, onClick }) {
             </div>
             <span style={{ fontSize: 11, fontWeight: awayWon ? 900 : 600, color: awayWon ? "white" : "#aaa" }}>{game.away}</span>
           </div>
-          {(isLive || isFullTime) && (
-            <span style={{ fontSize: 17, fontWeight: awayWon ? 900 : 600, color: awayWon ? "white" : "#666" }}>{game.away_score}</span>
-          )}
+          {(isLive || isFullTime) && <span style={{ fontSize: 17, fontWeight: awayWon ? 900 : 600, color: awayWon ? "white" : "#666" }}>{game.away_score}</span>}
         </div>
-
-        {!isLive && !isFullTime && (
-          <div style={{ fontSize: 8, color: "#2a2a2a", marginTop: 8 }}>{game.venue}</div>
-        )}
+        {!isLive && !isFullTime && <div style={{ fontSize: 8, color: "#2a2a2a", marginTop: 8 }}>{game.venue}</div>}
       </div>
     </div>
   );
@@ -111,16 +91,12 @@ function GameGrid({ games, onSelectGame }) {
     return (order[a.status] ?? 1) - (order[b.status] ?? 1);
   });
   const columns = [];
-  for (let i = 0; i < sorted.length; i += 3) {
-    columns.push(sorted.slice(i, i + 3));
-  }
+  for (let i = 0; i < sorted.length; i += 3) columns.push(sorted.slice(i, i + 3));
   return (
     <div style={{ display: "flex", gap: 10, overflowX: "auto", paddingRight: 20, paddingBottom: 4, scrollbarWidth: "none" }}>
       {columns.map((col, ci) => (
         <div key={ci} style={{ display: "flex", flexDirection: "column", gap: 8, flexShrink: 0, width: 170 }}>
-          {col.map(game => (
-            <GameCard key={game.id} game={game} onClick={() => onSelectGame(game)} />
-          ))}
+          {col.map(game => <GameCard key={game.id} game={game} onClick={() => onSelectGame(game)} />)}
         </div>
       ))}
     </div>
@@ -148,39 +124,100 @@ const TOP_PLAYS = [
   { label: "Line Break", player: "Kalyn Ponga", team: "Knights", number: 1, minute: 12, points: 6 },
 ];
 
-export default function HomeScreen({ onSelectGame }) {
+function Profile({ session, onClose, onSignOut }) {
+  return (
+    <>
+      <div onClick={onClose} style={{
+        position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)",
+        zIndex: 200, backdropFilter: "blur(4px)",
+      }} />
+      <div style={{
+        position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)",
+        width: "100%", maxWidth: 430, zIndex: 201,
+        background: "#13131f", borderRadius: "24px 24px 0 0",
+        border: "1px solid #2a2a3a", borderBottom: "none",
+        padding: "32px 24px 48px",
+        animation: "slideUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
+      }}>
+        <style>{`
+          @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(100%); }
+            to { transform: translateX(-50%) translateY(0); }
+          }
+        `}</style>
+        <div style={{ width: 40, height: 4, background: "#2a2a3a", borderRadius: 2, margin: "0 auto 28px" }} />
+
+        {/* Avatar placeholder */}
+        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 28 }}>
+          <div style={{
+            width: 64, height: 64, borderRadius: "50%",
+            background: "#2a2a3a", border: "2px solid #333",
+            display: "flex", alignItems: "center", justifyContent: "center",
+            fontSize: 28,
+          }}>👤</div>
+          <div>
+            <div style={{ fontSize: 18, fontWeight: 900, marginBottom: 4 }}>
+              {session.user.email.split('@')[0]}
+            </div>
+            <div style={{ fontSize: 12, color: "#444" }}>{session.user.email}</div>
+          </div>
+        </div>
+
+        {/* Upload profile pic placeholder */}
+        <button style={{
+          width: "100%", padding: "14px", borderRadius: 12,
+          background: "#080810", border: "1px solid #2a2a3a",
+          color: "#666", fontSize: 13, fontWeight: 700,
+          cursor: "pointer", fontFamily: "inherit", marginBottom: 12,
+        }}>
+          📷 Upload Profile Picture
+        </button>
+
+        {/* Sign out */}
+        <button
+          onClick={onSignOut}
+          style={{
+            width: "100%", padding: "14px", borderRadius: 12,
+            background: "#ef444422", border: "1px solid #ef444444",
+            color: "#ef4444", fontSize: 13, fontWeight: 700,
+            cursor: "pointer", fontFamily: "inherit",
+          }}
+        >
+          Sign Out
+        </button>
+      </div>
+    </>
+  );
+}
+
+export default function HomeScreen({ onSelectGame, session }) {
   const [currentRound, setCurrentRound] = useState(0);
+  const [showAuth, setShowAuth] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
   const round = ROUNDS[currentRound];
+
+  const handleSignOut = async () => {
+    const { supabase } = await import('./supabase');
+    await supabase.auth.signOut();
+    setShowProfile(false);
+  };
 
   return (
     <div style={{
-      minHeight: "100vh",
-      background: "#080810",
-      color: "white",
+      minHeight: "100vh", background: "#080810", color: "white",
       fontFamily: "'Helvetica Neue', Arial, sans-serif",
-      maxWidth: 430,
-      margin: "0 auto",
-      overflowX: "hidden",
+      maxWidth: 430, margin: "0 auto", overflowX: "hidden",
     }}>
-
       {/* Header */}
       <div style={{
-        background: "#13131f",
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
+        background: "#13131f", position: "sticky", top: 0, zIndex: 100,
         borderBottom: "1px solid #2a2a3a",
       }}>
-        {/* Status bar fill */}
         <div style={{ height: 36 }} />
-
-        {/* Pulse + icons */}
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px 12px" }}>
-          <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: -1.5, color: "white", fontStyle: "italic" }}>
-            Pulse
-          </div>
+          <div style={{ fontSize: 32, fontWeight: 900, letterSpacing: -1.5, color: "white", fontStyle: "italic" }}>Pulse</div>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            {["💬", "🔔", "👤"].map((icon, i) => (
+            {["💬", "🔔"].map((icon, i) => (
               <button key={i} style={{
                 width: 36, height: 36, borderRadius: "50%",
                 background: "#161622", border: "1px solid #222",
@@ -188,15 +225,19 @@ export default function HomeScreen({ onSelectGame }) {
                 cursor: "pointer", fontSize: 15,
               }}>{icon}</button>
             ))}
+            <button
+              onClick={() => session ? setShowProfile(true) : setShowAuth(true)}
+              style={{
+                width: 36, height: 36, borderRadius: "50%",
+                background: session ? "#22c55e22" : "#161622",
+                border: `1px solid ${session ? "#22c55e44" : "#222"}`,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                cursor: "pointer", fontSize: 15,
+              }}>👤</button>
           </div>
         </div>
-
-        {/* Sport tabs */}
         <div style={{ display: "flex", gap: 8, padding: "0 20px 16px" }}>
-          {[
-            { label: "NRL", active: true },
-            { label: "AFL", active: false, soon: true },
-          ].map(sport => (
+          {[{ label: "NRL", active: true }, { label: "AFL", active: false, soon: true }].map(sport => (
             <button key={sport.label} style={{
               padding: "8px 20px", borderRadius: 20,
               background: sport.active ? "white" : "transparent",
@@ -220,33 +261,24 @@ export default function HomeScreen({ onSelectGame }) {
       </div>
 
       {/* Round selector */}
-      <div style={{
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "14px 20px", borderBottom: "1px solid #111",
-      }}>
-        <button
-          onClick={() => setCurrentRound(r => Math.max(0, r - 1))}
-          disabled={currentRound === 0}
-          style={{ background: "none", border: "none", color: currentRound === 0 ? "#222" : "#666", fontSize: 22, cursor: currentRound === 0 ? "not-allowed" : "pointer" }}
-        >‹</button>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 20px", borderBottom: "1px solid #111" }}>
+        <button onClick={() => setCurrentRound(r => Math.max(0, r - 1))} disabled={currentRound === 0}
+          style={{ background: "none", border: "none", color: currentRound === 0 ? "#222" : "#666", fontSize: 22, cursor: currentRound === 0 ? "not-allowed" : "pointer" }}>‹</button>
         <div style={{ textAlign: "center" }}>
           <div style={{ fontSize: 15, fontWeight: 800 }}>Round {round.round}</div>
           <div style={{ fontSize: 10, color: "#444", letterSpacing: 2, marginTop: 2 }}>NRL PREMIERSHIP 2026</div>
         </div>
-        <button
-          onClick={() => setCurrentRound(r => Math.min(ROUNDS.length - 1, r + 1))}
-          disabled={currentRound === ROUNDS.length - 1}
-          style={{ background: "none", border: "none", color: currentRound === ROUNDS.length - 1 ? "#222" : "#666", fontSize: 22, cursor: currentRound === ROUNDS.length - 1 ? "not-allowed" : "pointer" }}
-        >›</button>
+        <button onClick={() => setCurrentRound(r => Math.min(ROUNDS.length - 1, r + 1))} disabled={currentRound === ROUNDS.length - 1}
+          style={{ background: "none", border: "none", color: currentRound === ROUNDS.length - 1 ? "#222" : "#666", fontSize: 22, cursor: currentRound === ROUNDS.length - 1 ? "not-allowed" : "pointer" }}>›</button>
       </div>
 
       {/* Standings button */}
       <div style={{ padding: "12px 20px 0" }}>
         <button style={{
-          background: "transparent", border: "1px solid #1a1a1a",
+          background: "transparent", border: "1px solid #2a2a3a",
           borderRadius: 8, padding: "8px 16px",
-          color: "#555", fontSize: 11, letterSpacing: 3,
-          cursor: "pointer", fontFamily: "inherit",
+          color: "white", fontSize: 11, letterSpacing: 3,
+          fontWeight: 700, cursor: "pointer", fontFamily: "inherit",
         }}>📊 STANDINGS</button>
       </div>
 
@@ -265,7 +297,7 @@ export default function HomeScreen({ onSelectGame }) {
           {TOP_PLAYERS.map((player, i) => (
             <div key={i} style={{ textAlign: "center" }}>
               <TeamAvatar team={player.team} number={player.number} name={player.name} />
-              <div style={{ fontSize: 10, color: "#555", marginTop: 4, fontWeight: 700 }}>{player.score}pts</div>
+              <div style={{ fontSize: 10, color: "white", marginTop: 4, fontWeight: 900 }}>{player.score}pts</div>
             </div>
           ))}
         </div>
@@ -287,7 +319,10 @@ export default function HomeScreen({ onSelectGame }) {
             <TeamAvatar team={play.team} number={play.number} name={play.player} />
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 13, fontWeight: 800 }}>{play.label}</div>
-              <div style={{ fontSize: 11, color: "#555", marginTop: 2 }}>{play.player} — {play.team}</div>
+              <div style={{ fontSize: 11, marginTop: 2 }}>
+                <span style={{ color: "white", fontWeight: 700 }}>{play.player}</span>
+                <span style={{ color: "#555" }}> — {play.team}</span>
+              </div>
             </div>
             <div style={{ textAlign: "right" }}>
               <div style={{ fontSize: 13, fontWeight: 900, color: "#22c55e" }}>+{play.points}</div>
@@ -299,19 +334,12 @@ export default function HomeScreen({ onSelectGame }) {
 
       {/* Bottom nav */}
       <div style={{
-        position: "fixed", bottom: 0, left: "50%",
-        transform: "translateX(-50%)",
-        width: "100%", maxWidth: 430,
-        background: "#080810",
-        borderTop: "1px solid #111",
-        padding: "12px 0 28px",
+        position: "fixed", bottom: 0, left: "50%", transform: "translateX(-50%)",
+        width: "100%", maxWidth: 430, background: "#080810",
+        borderTop: "1px solid #111", padding: "12px 0 28px",
         display: "flex", justifyContent: "space-around",
       }}>
-        {[
-          { icon: "🏉", label: "Games" },
-          { icon: "📊", label: "Stats" },
-          { icon: "🃏", label: "Cards" },
-        ].map((tab, i) => (
+        {[{ icon: "🏉", label: "Games" }, { icon: "📊", label: "Stats" }, { icon: "🃏", label: "Cards" }].map((tab, i) => (
           <button key={tab.label} style={{
             background: "none", border: "none",
             color: i === 0 ? "white" : "#333",
@@ -322,6 +350,9 @@ export default function HomeScreen({ onSelectGame }) {
           </button>
         ))}
       </div>
+
+      {showAuth && <Auth onClose={() => setShowAuth(false)} onSuccess={() => setShowAuth(false)} />}
+      {showProfile && <Profile session={session} onClose={() => setShowProfile(false)} onSignOut={handleSignOut} />}
     </div>
   );
 }

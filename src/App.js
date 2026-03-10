@@ -1,80 +1,78 @@
-import { useState } from 'react';
-import AdminDashboard from './AdminDashboard';
+import { useState, useEffect } from 'react';
+import { supabase } from './supabase';
 import FanApp from './FanApp';
-import GameSetup from './GameSetup';
+import AdminDashboard from './AdminDashboard';
 
-const OPERATOR_PASSWORD = 'nrl2026';
+const ADMIN_PASSWORD = 'nrl2026';
 
-function App() {
-  const isFan = window.location.search.includes('fan');
-  const [game, setGame] = useState(null);
-  const [authed, setAuthed] = useState(false);
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState(false);
+export default function App() {
+  const [session, setSession] = useState(null);
+  const [loadingSession, setLoadingSession] = useState(true);
+  const [adminUnlocked, setAdminUnlocked] = useState(false);
+  const [adminInput, setAdminInput] = useState('');
 
-  if (isFan) return <FanApp />;
+  const params = new URLSearchParams(window.location.search);
+  const isFan = params.has('fan');
 
-  if (!authed) {
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+      setLoadingSession(false);
+    });
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (loadingSession) {
     return (
       <div style={{
-        minHeight: "100vh", background: "#0a0a0f",
+        minHeight: "100vh", background: "#080810",
         display: "flex", alignItems: "center", justifyContent: "center",
-        fontFamily: "monospace",
+        fontFamily: "'Helvetica Neue', Arial, sans-serif",
       }}>
-        <div style={{ width: 320, textAlign: "center" }}>
-          <div style={{ fontSize: 11, letterSpacing: 6, color: "#444", marginBottom: 12 }}>NRL LIVE OPERATOR</div>
-          <div style={{ fontSize: 32, fontWeight: 900, color: "white", marginBottom: 40 }}>🏉</div>
+        <div style={{ fontSize: 32, fontWeight: 900, fontStyle: "italic", color: "white", letterSpacing: -1 }}>Pulse</div>
+      </div>
+    );
+  }
+
+  if (isFan) return <FanApp session={session} />;
+
+  if (!adminUnlocked) {
+    return (
+      <div style={{
+        minHeight: "100vh", background: "#080810",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        fontFamily: "'Helvetica Neue', Arial, sans-serif",
+      }}>
+        <div style={{ textAlign: "center" }}>
+          <div style={{ fontSize: 32, fontWeight: 900, fontStyle: "italic", color: "white", letterSpacing: -1, marginBottom: 32 }}>Pulse</div>
           <input
             type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={e => { setPassword(e.target.value); setError(false); }}
-            onKeyDown={e => {
-              if (e.key === 'Enter') {
-                if (password === OPERATOR_PASSWORD) {
-                  setAuthed(true);
-                } else {
-                  setError(true);
-                }
-              }
-            }}
+            placeholder="Operator password"
+            value={adminInput}
+            onChange={e => setAdminInput(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' && adminInput === ADMIN_PASSWORD && setAdminUnlocked(true)}
             style={{
-              width: "100%", padding: "14px 16px",
-              background: "#111", border: `1px solid ${error ? "#ef4444" : "#222"}`,
-              borderRadius: 8, color: "white", fontSize: 14,
-              fontFamily: "monospace", marginBottom: 12,
-              outline: "none", textAlign: "center",
+              background: "#13131f", border: "1px solid #2a2a3a",
+              borderRadius: 12, padding: "14px 20px", color: "white",
+              fontSize: 14, fontFamily: "inherit", outline: "none",
+              marginBottom: 12, display: "block", width: 260, boxSizing: "border-box",
             }}
           />
-          {error && (
-            <div style={{ color: "#ef4444", fontSize: 11, letterSpacing: 2, marginBottom: 12 }}>
-              INCORRECT PASSWORD
-            </div>
-          )}
           <button
-            onClick={() => {
-              if (password === OPERATOR_PASSWORD) {
-                setAuthed(true);
-              } else {
-                setError(true);
-              }
-            }}
+            onClick={() => adminInput === ADMIN_PASSWORD && setAdminUnlocked(true)}
             style={{
-              width: "100%", padding: 14, borderRadius: 8,
-              background: "white", color: "black",
-              border: "none", fontSize: 12, fontWeight: 700,
-              letterSpacing: 4, cursor: "pointer", fontFamily: "monospace",
+              width: 260, padding: "14px", borderRadius: 12,
+              background: "white", border: "none", color: "black",
+              fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: "inherit",
             }}
-          >
-            ENTER
-          </button>
+          >Enter</button>
         </div>
       </div>
     );
   }
 
-  if (!game) return <GameSetup onStart={setGame} />;
-  return <AdminDashboard game={game} />;
+  return <AdminDashboard />;
 }
-
-export default App;
